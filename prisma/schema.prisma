@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+
+datasource carlito {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Marca {
+  id_brand String  @id 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  nameBrand String   @carlito.VarChar(55)
+}
+model Modelo {
+  id String @id 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  nameModel   String   @carlito.VarChar(255)
+}
+model Size {
+  id_size String @id 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  price Decimal
+  namesize String
+}
