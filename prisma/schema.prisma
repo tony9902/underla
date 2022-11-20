@@ -21,13 +21,15 @@ model pedido {
   id_pedido Int @id 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user Usuario @relation(fields: [IdUser],references: [id_User])
+  user usuario @relation(fields: [IdUser],references: [id_User])
   IdUser Int @unique
-  price Decimal
+  price Decimal       
   namesize String
 }
-model Usuario {
+model usuario {
   id_User Int @id 
+  idpedi pedido @relation(fields: [Id_pedi], references: [id_pedido])
+  Id_pedi int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   nameUser  String   @under.VarChar(55)
