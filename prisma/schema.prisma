@@ -3,27 +3,35 @@
 
 
 
-datasource carlito {
+datasource under {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model Marca {
-  id_brand String  @id 
+model product {
+  id_product Int  @id 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  nameBrand String   @carlito.VarChar(55)
+  nameProduct String @under.VarChar(35)
+  nameBrand String   @under.VarChar(55)
+  nameModel String @under.VarChar(20)  
 }
-model Modelo {
-  id String @id 
+
+model pedido {
+  id_pedido Int @id 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  nameModel   String   @carlito.VarChar(255)
-}
-model Size {
-  id_size String @id 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user Usuario @relation(fields: [IdUser],references: [id_User])
+  IdUser Int @unique
   price Decimal
   namesize String
+}
+model Usuario {
+  id_User Int @id 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  nameUser  String   @under.VarChar(55)
+  mail_user String @under.VarChar(70)
+  number_user String @under.VarChar(9)
+  seller Boolean  @default(false)
 }
