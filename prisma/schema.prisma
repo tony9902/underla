@@ -1,39 +1,64 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-
-
 datasource under {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model product {
-  id_product Int  @id 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  nameProduct String @under.VarChar(35)
-  nameBrand String   @under.VarChar(55)
-  nameModel String @under.VarChar(20)  
+generator client {
+  provider = "prisma-client-js"
 }
 
-model pedido {
-  id_pedido Int @id 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user usuario @relation(fields: [IdUser],references: [id_User])
-  IdUser Int @unique
-  price Decimal       
-  namesize String
+model User {
+  id          Int               @id @default(autoincrement())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now())
+  name        String            @under.VarChar(55)
+  mail        String            @under.VarChar(70)
+  phoneNumber String            @under.VarChar(9)
+  Order       Order[]
+  producs     OwnerOnProducts[]
+  profiles    Profile[]
+} 
+
+model Profile {
+  id     Int    @id @default(autoincrement())
+  name    String
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @unique
 }
-model usuario {
-  id_User Int @id 
-  idpedi pedido @relation(fields: [Id_pedi], references: [id_pedido])
-  Id_pedi int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  nameUser  String   @under.VarChar(55)
-  mail_user String @under.VarChar(70)
-  number_user String @under.VarChar(9)
-  seller Boolean  @default(false)
+
+model Product {
+  id        Int               @id @default(autoincrement())
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  name      String            @under.VarChar(35)
+  brand     String            @under.VarChar(55)
+  model     String            @under.VarChar(20)
+  order     Order             @relation(fields: [orderId], references: [id])
+  orderId   Int               @unique
+  owners    OwnerOnProducts[]
+}
+
+model OwnerOnProducts {
+  owner     User    @relation(fields: [ownerId], references: [id])
+  ownerId   Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  size      Decimal
+  price     Decimal
+
+  @@id([ownerId, productId])
+}
+
+model Order {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  buyer     User      @relation(fields: [buyerId], references: [id])
+  buyerId   Int       @unique
+  price     Decimal
+  namesize  String
+  products  Product[]
 }
